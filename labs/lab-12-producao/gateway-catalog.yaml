@@ -1,0 +1,16 @@
+# Catálogo local do Docker MCP Gateway. A imagem declara duas tools; --tools libera apenas uma.
+name: lab
+displayName: Lab
+registry:
+  finance:
+    title: Finance
+    description: Retention bonus server of lab 12
+    type: server
+    image: lab-12-producao:local
+    command:
+      - python
+      - -m
+      - lab_12_production.stdio_server
+    tools:
+      - name: issue_retention_bonus
+      - name: list_users

@@ -1,0 +1,14 @@
+# Lab 01: Uma tool nos formatos de três provedores e a conta N×M contra N+M.
+services:
+  scenario:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    profiles: [scenario]
+    image: lab-01-nxm:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-01-nxm
+    command: ["python", "-m", "lab_01_nxm.scenario"]

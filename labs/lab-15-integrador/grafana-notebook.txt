@@ -1,0 +1,6 @@
+# Por que este pedido de pós-venda falhou?
+
+1. No dashboard, veja **Error rate by service** e identifique o serviço.
+2. Abra um exemplar de latência para ver o trace entre cliente, orquestrador, redator e server MCP.
+3. No **Node Graph**, confirme a ordem dos saltos.
+4. Pelo link de logs do span, leia a causa e registre aqui a conclusão.

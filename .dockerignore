@@ -1,0 +1,12 @@
+# Mantém o contexto de build pequeno e evita enviar segredos e ambientes locais às imagens.
+.git
+.env
+.venv
+**/.venv
+**/__pycache__
+**/.mypy_cache
+**/.ruff_cache
+**/.pytest_cache
+**/node_modules
+docs
+*.md

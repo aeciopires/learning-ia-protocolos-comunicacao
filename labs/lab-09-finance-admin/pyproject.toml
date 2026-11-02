@@ -1,0 +1,16 @@
+[project]
+name = "lab-09-finance-admin"
+version = "0.1.0"
+description = "Finance Admin: regra de negócio, erros tipados, progresso e cancelamento"
+requires-python = ">=3.14"
+dependencies = ["labs-common", "psycopg[binary]==3.3.6"]
+
+[tool.uv.sources]
+labs-common = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.13,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "lab_09_finance"

@@ -1,0 +1,6 @@
+# Por que este bônus foi recusado?
+
+1. No dashboard, abra **Bonus refusals by reason** e identifique o motivo.
+2. Em **Latency p95 by operation**, clique em um exemplar para abrir o trace.
+3. No trace, use o link de logs para ler a linha `bonus refused`.
+4. Registre aqui a conclusão e o valor máximo informado ao agente.

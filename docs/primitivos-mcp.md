@@ -29,7 +29,11 @@ Tools são capacidades executáveis expostas pelo server para transformar inten�
 Uma tool não deve ser anunciada apenas em linguagem natural; ela precisa de um contrato explícito, descrito por JSON Schema no campo `inputSchema`, cujo dialeto padrão é o 2020-12. Esse schema define campos, tipos e obrigatoriedade de parâmetros como `to`, `subject` e `body` em uma operação `send_email`. O objetivo é restringir a ambiguidade da LLM e tornar a chamada mais determinística. Quanto mais claro o contrato, maior a chance de execução correta e menor a liberdade para inferências erradas.
 
 ## Analogia com POST, PUT e DELETE
-Se resources ocupam o espaço semântico do GET, tools se aproximam de POST, PUT e DELETE: são operações transacionais ou ativas. Elas existem para alterar estado ou produzir efeitos concretos no output do sistema. Essa analogia ajuda a classificar capacidades do server sem depender de intuição vaga. Nos próximos cenários com PostgreSQL MCP e GitHub MCP, esse critério separa o que deve ser navegado como contexto do que deve ser invocado como ação.
+Se resources ocupam o espaço semântico do GET, tools se aproximam de POST, PUT e DELETE: são operações transacionais ou ativas. Elas existem para alterar estado ou produzir efeitos concretos no output do sistema. Essa analogia ajuda a classificar capacidades do server sem depender de intuição vaga. Em servers como PostgreSQL MCP e GitHub MCP, esse critério separa o que deve ser navegado como contexto do que deve ser invocado como ação.
+
+## Laboratório
+
+O [Lab 05: resources, tools e prompts](../labs/lab-05-primitivos/README.md) demonstra este conteúdo: usar os três primitivos no cenário de pedidos: olhar antes de agir e ver como cada um responde a uma falha. Execute com `make lab-start LAB=05` e `make lab-run LAB=05`.
 
 ## Referências
 

@@ -1,0 +1,69 @@
+# Lab 11: OAuth 2.1 com PKCE, audiência, scopes e renovação de token.
+include:
+  - ../observability/compose.yaml
+
+services:
+  server:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-11-oauth:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-11-oauth
+    command: ["python", "-m", "lab_11_oauth.server"]
+    ports:
+      # Publicado em 127.0.0.1 para uso com o MCP Inspector no host.
+      - "127.0.0.1:${LAB_SERVICE_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      keycloak:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+  scenario:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    profiles: [scenario]
+    image: lab-11-oauth:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-11-oauth
+    command: ["python", "-m", "lab_11_oauth.scenario"]
+    environment:
+      KEYCLOAK_DEMO_PASSWORD: ${KEYCLOAK_DEMO_PASSWORD:?KEYCLOAK_DEMO_PASSWORD is not set. Run make secret}
+    depends_on:
+      server:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.8.1
+    # start-dev e HTTP servem só ao laboratório; em produção, o provedor de identidade exige TLS.
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?KEYCLOAK_ADMIN_PASSWORD is not set. Run make secret}
+      # O emissor fica fixo: tokens obtidos e validados dentro da rede têm o mesmo `iss`.
+      KC_HOSTNAME: http://keycloak:8080
+      KC_HOSTNAME_STRICT: "false"
+      KEYCLOAK_DEMO_PASSWORD: ${KEYCLOAK_DEMO_PASSWORD:?KEYCLOAK_DEMO_PASSWORD is not set. Run make secret}
+    volumes:
+      - ./realm.json:/opt/keycloak/data/import/realm.json:ro
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/127.0.0.1/8080"]
+      interval: 5s
+      timeout: 3s
+      retries: 40

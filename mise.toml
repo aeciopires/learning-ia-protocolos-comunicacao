@@ -1,0 +1,9 @@
+# Versões das ferramentas gerenciadas pelo mise (https://mise.jdx.dev).
+# Docker e Docker Compose vêm do sistema operacional, não do mise.
+[tools]
+python = "3.14.10"
+uv = "0.13.6"
+# Node.js serve apenas para executar o MCP Inspector, que exige a versão 22.19 ou mais nova.
+node = "24.22.2"
+# Valida os scripts chamados pelo Makefile.
+shellcheck = "0.11.0"

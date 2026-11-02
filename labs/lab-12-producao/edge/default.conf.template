@@ -1,0 +1,39 @@
+# Borda do lab 12. O nginx substitui ${MCP_BEARER_TOKEN} ao iniciar; as demais variáveis são do nginx.
+limit_req_zone $binary_remote_addr zone=mcp:10m rate=5r/s;
+limit_req_status 429;
+
+# Host desconhecido não chega ao backend: é a proteção contra DNS rebinding na borda.
+server {
+    listen 8080 default_server;
+    return 421;
+}
+
+server {
+    listen 8080;
+    server_name edge localhost 127.0.0.1;
+
+    location = /mcp {
+        limit_req zone=mcp burst=10 nodelay;
+        # A LLM usa a tool, mas nunca recebe este segredo: quem o injeta é a borda.
+        proxy_set_header Authorization "Bearer ${MCP_BEARER_TOKEN}";
+        proxy_set_header Host server;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        # Sem buffering, para os eventos SSE chegarem ao client assim que são gerados.
+        proxy_buffering off;
+        proxy_pass http://server:8000;
+    }
+
+    # Só /mcp é público: /metrics e /healthz do backend ficam restritos à rede interna.
+    location / {
+        return 404;
+    }
+}
+
+# Porta interna do health check do próprio nginx; não é publicada no host.
+server {
+    listen 8081;
+    location = /ready {
+        return 200 "ok\n";
+    }
+}

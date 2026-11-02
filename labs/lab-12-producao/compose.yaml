@@ -1,0 +1,91 @@
+# Lab 12: Imagem endurecida, borda, allowlist, 429, DNS rebinding e caos controlado.
+include:
+  - ../observability/compose.yaml
+
+services:
+  server:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-12-producao:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-12-producao
+    command: ["python", "-m", "lab_12_production.server"]
+    environment:
+      MCP_BEARER_TOKEN: ${MCP_BEARER_TOKEN:?MCP_BEARER_TOKEN is not set. Run make secret}
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      otel-collector:
+        condition: service_started
+
+  scenario:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    profiles: [scenario]
+    image: lab-12-producao:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-12-producao
+    command: ["python", "-m", "lab_12_production.scenario"]
+    environment:
+      MCP_BEARER_TOKEN: ${MCP_BEARER_TOKEN:?MCP_BEARER_TOKEN is not set. Run make secret}
+    depends_on:
+      server:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+  edge:
+    # Borda: rate limit, allowlist de Host e injeção do token; é o único ponto publicado no host.
+    image: nginx:1.31.8-alpine
+    environment:
+      MCP_BEARER_TOKEN: ${MCP_BEARER_TOKEN:?MCP_BEARER_TOKEN is not set. Run make secret}
+    volumes:
+      - ./edge/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    ports:
+      - "127.0.0.1:${LAB_SERVICE_PORT:-8000}:8080"
+    tmpfs:
+      - /etc/nginx/conf.d
+      - /var/cache/nginx
+      - /var/run
+    mem_limit: 128m
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8081/ready"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    depends_on:
+      server:
+        condition: service_healthy
+
+  gateway:
+    # Docker MCP Gateway: aplica a allowlist de tools. Ele inicia o server em um container próprio,
+    # por isso precisa do socket do Docker, um privilégio alto e que só este lab concede.
+    image: docker/mcp-gateway:v0.44.3
+    command:
+      - --transport=streaming
+      - --port=8811
+      - --catalog=lab.yaml
+      - --servers=finance
+      - --tools=finance:issue_retention_bonus
+      # A imagem é construída localmente, então não tem assinatura a verificar.
+      - --verify-signatures=false
+    environment:
+      DOCKER_MCP_IN_CONTAINER: "1"
+      MCP_GATEWAY_AUTH_TOKEN: ${MCP_BEARER_TOKEN:?MCP_BEARER_TOKEN is not set. Run make secret}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./gateway-catalog.yaml:/root/.docker/mcp/catalogs/lab.yaml:ro
+    depends_on:
+      server:
+        condition: service_healthy

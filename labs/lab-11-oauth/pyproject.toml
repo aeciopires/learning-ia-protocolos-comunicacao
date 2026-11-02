@@ -1,0 +1,16 @@
+[project]
+name = "lab-11-oauth"
+version = "0.1.0"
+description = "OAuth 2.1 com PKCE, audiência, scopes e renovação de token"
+requires-python = ">=3.14"
+dependencies = ["labs-common", "pyjwt[crypto]==2.15.1"]
+
+[tool.uv.sources]
+labs-common = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.13,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "lab_11_oauth"

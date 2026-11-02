@@ -1,0 +1,67 @@
+# Lab 13: Agent Card, estados de Task, pausa e retomada, streaming, webhook e artifacts.
+include:
+  - ../observability/compose.yaml
+
+services:
+  agent:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-13-a2a-tasks:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-13-a2a-tasks
+    command: ["python", "-m", "lab_13_a2a_tasks.agent"]
+    ports:
+      # Publicado em 127.0.0.1 para uso com o MCP Inspector no host.
+      - "127.0.0.1:${LAB_SERVICE_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      otel-collector:
+        condition: service_started
+
+  webhook:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-13-a2a-tasks:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-13-a2a-tasks
+    command: ["python", "-m", "lab_13_a2a_tasks.webhook"]
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      otel-collector:
+        condition: service_started
+
+  scenario:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    profiles: [scenario]
+    image: lab-13-a2a-tasks:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-13-a2a-tasks
+    command: ["python", "-m", "lab_13_a2a_tasks.scenario"]
+    depends_on:
+      agent:
+        condition: service_healthy
+      webhook:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started

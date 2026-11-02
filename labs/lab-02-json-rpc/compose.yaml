@@ -1,0 +1,39 @@
+# Lab 02: Mensagens JSON-RPC brutas em stdio e HTTP.
+services:
+  server:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-02-json-rpc:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-02-json-rpc
+    command: ["python", "-m", "lab_02_json_rpc.mcp_server"]
+    ports:
+      # Publicado em 127.0.0.1 para uso com o MCP Inspector no host.
+      - "127.0.0.1:${LAB_SERVICE_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+
+  scenario:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    profiles: [scenario]
+    image: lab-02-json-rpc:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-02-json-rpc
+    command: ["python", "-m", "lab_02_json_rpc.scenario"]
+    environment:
+      OTEL_SDK_DISABLED: "true"
+    depends_on:
+      server:
+        condition: service_healthy

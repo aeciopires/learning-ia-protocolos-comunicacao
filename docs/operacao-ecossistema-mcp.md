@@ -4,8 +4,8 @@
 ## Operação do ecossistema MCP antes de implementar servers próprios
 Operar servers MCP de terceiros é a etapa que transforma entendimento arquitetural em repertório operacional. Antes de escrever um server próprio, você precisa saber conectar um server existente, validar se ele anuncia capabilities corretamente e observar como o host interage com ele em ambiente real. Retomando o cenário de consultar dados e agir sobre múltiplos domínios, a novidade aqui é enxergar isso funcionando sem costura manual entre integrações. O foco deixa de ser definição de papéis e passa a ser inspeção, comparação e troubleshooting.
 
-## Sequência de setup do laboratório
-O fluxo prático começa subindo um PostgreSQL local em container, com um esquema mínimo de clientes e pedidos, suficiente para consultas realistas. Em seguida, conecta-se o PostgreSQL MCP ao host e valida-se a conexão com o Inspector. Depois, adiciona-se o GitHub MCP ao mesmo host e repete-se a inspeção. A etapa final combina os dois servers em uma única pergunta para observar fanout entre domínios sem escrever código de integração manual.
+## Sequência de setup para explorar o ecossistema
+O fluxo prático começa subindo um PostgreSQL local em container, com um esquema mínimo de clientes e pedidos, suficiente para consultas realistas. Em seguida, conecta-se um server MCP de banco de dados ao host e valida-se a conexão com o Inspector. Depois, adiciona-se o GitHub MCP ao mesmo host e repete-se a inspeção. A etapa final combina os dois servers em uma única pergunta para observar fanout entre domínios sem escrever código de integração manual.
 
 ## PostgreSQL MCP como exemplo resource-heavy
 O PostgreSQL MCP de referência é didaticamente valioso porque expõe o esquema de cada tabela como resource e mantém uma única tool, `query`, para consultas SQL somente leitura. Esse desenho torna visível a diferença entre expor contexto navegável e expor execução, conforme a distinção entre resources e tools já estabelecida anteriormente. Em produção, porém, esse server não deve ser adotado: ele está no repositório de servers arquivados, sem manutenção, e o projeto declara que não há garantias de segurança para esses servers.
@@ -72,6 +72,10 @@ Ler o MCP on wire significa observar a sequência real de mensagens JSON-RPC tro
 
 ## Inspector, múltiplos servers e preparação para implementação
 O Inspector continua sendo a ferramenta neutra para validar contrato, transporte e sequência protocolar antes de culpar host ou modelo. No cenário com múltiplos servers já visto anteriormente, ele ajuda a confirmar que a orquestração depende de contratos corretos, não de glue code artesanal entre domínios. A próxima etapa natural é implementar servers com SDKs, mas já com critérios claros de versão do protocolo, capabilities, timeout, progress, cancellation e encerramento.
+
+## Laboratório
+
+O [Lab 07: ecossistema MCP](../labs/lab-07-ecossistema/README.md) demonstra este conteúdo: comparar um server de leitura e um server de ações, fazer fanout entre eles e conectar nas duas eras do protocolo. Execute com `make lab-start LAB=07` e `make lab-run LAB=07`.
 
 ## Referências
 

@@ -43,6 +43,10 @@ OpenTelemetry fornece um padrão aberto para coletar telemetria e tracing distri
 ## Projeto integrador end-to-end e arquitetura multiagente
 Um projeto integrador end-to-end conecta todas essas camadas em uma solução única: protocolo, contratos, identidade, isolamento, colaboração e observabilidade. Retomando o cenário de agentes, a nova camada não é reexplicar o problema inicial, mas organizar tecnicamente a solução em papéis arquiteturais, primitivas, estados de task e mecanismos de controle. A arquitetura multiagente surge quando esses contratos permitem que agentes especializados cooperem sem depender de integrações sob medida para cada par de componentes. O domínio real do tema aparece quando a solução funciona ponta a ponta com governança, rastreabilidade e capacidade de evolução.
 
+## Laboratório
+
+O [Lab 15: assistente de pós-venda](../labs/lab-15-integrador/README.md) demonstra este conteúdo: juntar as camadas em um fluxo só: A2A entre agentes, MCP para dados, tool calling para um cálculo, token de serviço e correlação ponta a ponta. Execute com `make lab-start LAB=15` e `make lab-run LAB=15`.
+
 ## Referências
 
 Fontes oficiais sobre os temas deste documento.

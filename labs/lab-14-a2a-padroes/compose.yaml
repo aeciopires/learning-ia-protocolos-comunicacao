@@ -1,0 +1,45 @@
+# Lab 14: Padrões delegado, hierárquico e pipeline.
+include:
+  - ../observability/compose.yaml
+
+services:
+  specialists:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-14-a2a-padroes:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-14-a2a-padroes
+    command: ["python", "-m", "lab_14_patterns.specialists"]
+    ports:
+      # Publicado em 127.0.0.1 para uso com o MCP Inspector no host.
+      - "127.0.0.1:${LAB_SERVICE_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      otel-collector:
+        condition: service_started
+
+  scenario:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    profiles: [scenario]
+    image: lab-14-a2a-padroes:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-14-a2a-padroes
+    command: ["python", "-m", "lab_14_patterns.scenario"]
+    depends_on:
+      specialists:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started

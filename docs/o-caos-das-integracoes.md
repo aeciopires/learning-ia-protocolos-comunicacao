@@ -40,6 +40,10 @@ MCP não cria inteligência, não padroniza semântica de domínio e não substi
 ## Contexto antes da sintaxe
 Aprender protocolo apenas pela sintaxe produz conhecimento superficial: a pessoa sabe fazer chamadas, mas não entende por que a tecnologia existe. O contexto arquitetural vem antes de JSON-RPC, wire format, host, client, server e transporte, porque esses elementos só fazem sentido quando ligados à dor estrutural que motivou sua criação. Quando o problema é compreendido, o protocolo deixa de parecer arbitrário e passa a ser visto como resposta histórica à fragmentação. Esse enquadramento melhora a capacidade de tomar decisões arquiteturais, não apenas de usar APIs.
 
+## Laboratório
+
+O [Lab 01: o problema N×M](../labs/lab-01-nxm/README.md) demonstra este conteúdo: ver uma mesma tool nos formatos de Anthropic, OpenAI, Gemini e MCP, e comparar o crescimento das integrações com e sem um protocolo comum. Execute com `make lab-start LAB=01` e `make lab-run LAB=01`.
+
 ## Referências
 
 Fontes oficiais sobre os temas deste documento.

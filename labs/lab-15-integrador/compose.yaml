@@ -1,0 +1,117 @@
+# Lab 15: Assistente de pós-venda com A2A, MCP, tool calling, identidade e correlação completa.
+include:
+  - ../observability/compose.yaml
+
+services:
+  orders:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-15-integrador:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-15-integrador
+    command: ["python", "-m", "lab_15_integrator.orders_server"]
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is not set. Run make secret}
+      MCP_BEARER_TOKEN: ${MCP_BEARER_TOKEN:?MCP_BEARER_TOKEN is not set. Run make secret}
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      postgres:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+  writer:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-15-integrador:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-15-integrador
+    command: ["python", "-m", "lab_15_integrator.writer_agent"]
+    environment:
+      LLM_PROVIDER: ${LLM_PROVIDER:-fake}
+      LLM_MODEL: ${LLM_MODEL:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      MCP_BEARER_TOKEN: ${MCP_BEARER_TOKEN:?MCP_BEARER_TOKEN is not set. Run make secret}
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      orders:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+  orchestrator:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-15-integrador:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-15-integrador
+    command: ["python", "-m", "lab_15_integrator.orchestrator_agent"]
+    ports:
+      # Publicado em 127.0.0.1 para uso com o MCP Inspector no host.
+      - "127.0.0.1:${LAB_SERVICE_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      writer:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+  scenario:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    profiles: [scenario]
+    image: lab-15-integrador:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-15-integrador
+    command: ["python", "-m", "lab_15_integrator.scenario"]
+    depends_on:
+      orders:
+        condition: service_healthy
+      writer:
+        condition: service_healthy
+      orchestrator:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started
+
+  postgres:
+    extends:
+      file: ../postgres-base.yaml
+      service: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - postgres-data:/var/lib/postgresql
+
+volumes:
+  postgres-data:

@@ -1,0 +1,6 @@
+# Investigação de incidente: falha no reembolso
+
+1. Na interface do Jaeger, busque pelo serviço `lab-12-server` com a tag `error=true`, ou abra um exemplar no dashboard.
+2. Abra o span com erro de `issue_retention_bonus` e leia o stack trace.
+3. Compare com a mensagem que o cliente recebeu: ela não traz detalhes internos.
+4. Use o link de logs do span para confirmar a causa e registre aqui a conclusão.

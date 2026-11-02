@@ -74,10 +74,14 @@ Uma `Promise` manual envolvendo `setTimeout` é uma forma simples de simular uma
 Usar um cliente Python para conversar com um servidor TypeScript via `stdio` comprova que a interoperabilidade está no protocolo, não na linguagem. O cliente recebe o catálogo de tools exposto pelo servidor, o modelo escolhe quais chamar e os schemas orientam a montagem dos argumentos. Quando o Claude decide usar `analyzeLogistics` ou `runDiagnostic`, ele está consumindo capacidades publicadas pelo servidor TypeScript sem acoplamento à implementação interna. Essa etapa valida que o servidor não funciona apenas no Inspector, mas também em um cenário real de orquestração entre runtimes diferentes.
 
 ## `BrokenResourceError` após cancelamento
-`BrokenResourceError` é uma exceção da biblioteca `anyio`, usada pelo SDK em Python, observada no laboratório com o cliente Python: uma tarefa de leitura em segundo plano tenta encaminhar dados para um canal que já foi fechado. No cenário cancelado, a lógica de negócio pode até ter se comportado corretamente, mas a borda do cliente ainda precisa tratar a exceção. O erro polui o terminal e pode encerrar o processo com código de falha. O guia de migração do SDK Python v2 registra mudanças nesse comportamento, então vale reproduzir o caso na versão em uso antes de escrever o tratamento.
+`BrokenResourceError` é uma exceção da biblioteca `anyio`, usada pelo SDK em Python, que pode aparecer em um cliente Python: uma tarefa de leitura em segundo plano tenta encaminhar dados para um canal que já foi fechado. No cenário cancelado, a lógica de negócio pode até ter se comportado corretamente, mas a borda do cliente ainda precisa tratar a exceção. O erro polui o terminal e pode encerrar o processo com código de falha. O guia de migração do SDK Python v2 registra mudanças nesse comportamento, então vale reproduzir o caso na versão em uso antes de escrever o tratamento.
 
 ## Tratamento de exceção na borda
 Capturar a exceção no `main` do cliente é a diferença entre um cancelamento esperado e uma falha aparente do sistema. O abort faz parte do contrato operacional de uma tool longa; portanto, ele precisa ser tratado como fluxo previsto, não como pane inesperada. Quando essa captura não existe, a exceção “estoura na cara do cliente”, mesmo que o servidor tenha feito a limpeza corretamente. Em produção, a borda deve traduzir esse evento para uma resposta controlada, como “diagnóstico cancelado”, em vez de expor stack trace ou encerrar com erro bruto.
+
+## Laboratório
+
+O [Lab 08: SDK em TypeScript](../labs/lab-08-sdk-typescript/README.md) demonstra este conteúdo: consumir um server em TypeScript com um client em Python e ver schema Zod, `isError`, paginação por cursor e cancelamento com `AbortSignal`. Execute com `make lab-start LAB=08` e `make lab-run LAB=08`.
 
 ## Referências
 

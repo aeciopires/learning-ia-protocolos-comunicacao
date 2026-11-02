@@ -7,6 +7,9 @@
     - [Idioma e formato](#idioma-e-formato)
     - [Guia para leigos e diagramas](#guia-para-leigos-e-diagramas)
     - [Segurança do conteúdo](#segurança-do-conteúdo)
+    - [Código dos laboratórios](#código-dos-laboratórios)
+    - [Variáveis e segredos](#variáveis-e-segredos)
+  - [Criar ou alterar um laboratório](#criar-ou-alterar-um-laboratório)
   - [Manutenção do README](#manutenção-do-readme)
   - [Validação](#validação)
   - [Fluxo de commits e pull requests](#fluxo-de-commits-e-pull-requests)
@@ -19,7 +22,7 @@ Obrigado por contribuir com este material de estudo sobre protocolos de comunica
 
 ## O que este repositório contém
 
-O repositório tem apenas documentação em Markdown. Não há código, build, testes automatizados nem dependências.
+O repositório tem material técnico em Markdown e laboratórios executáveis em Python e Docker Compose.
 
 | Caminho | Papel |
 | --- | --- |
@@ -29,16 +32,19 @@ O repositório tem apenas documentação em Markdown. Não há código, build, t
 | `CLAUDE.md` | Regras de manutenção |
 | `CONTRIBUTING.md` | Este guia de contribuição |
 | `LICENSE` | Licença GPLv3 |
+| `labs/lab-NN-*` | Laboratórios: código, Compose, testes e README |
+| `labs/common` | Código compartilhado pelos labs |
+| `labs/observability` | Prometheus, Grafana, Jaeger, Loki e Collector |
+| `scripts/` e `Makefile` | Orquestração |
+| `REQUIREMENTS*.md` | Dependências por sistema operacional |
 
-Os laboratórios citados nos documentos, como `verify_lab.sh` e `mcp-catalog.yaml`, não estão aqui. Não os apresente como disponíveis.
-
-São bem-vindas, por exemplo, correções com fonte oficial, atualizações de versão, melhorias de clareza e novas analogias. Ferramentas, dependências e CI só devem ser adicionados depois de combinados.
+São bem-vindas, por exemplo, correções com fonte oficial, atualizações de versão, melhorias de clareza, novas analogias e melhorias nos labs. Novas ferramentas e CI só devem ser adicionados depois de combinados.
 
 ## Boas práticas
 
 ### Fontes e precisão técnica
 
-- Não invente comandos, arquivos, APIs, métricas nem resultados de laboratório.
+- Não invente comandos, arquivos, APIs, métricas nem resultados.
 - Baseie toda afirmação técnica nova em uma fonte oficial: especificação, RFC, documentação ou repositório do próprio projeto. Blogs, fóruns e resumos de terceiros não servem como fonte.
 - Abra cada URL antes de citá-la e confirme que ela trata do assunto.
 - Quando o comportamento mudar entre versões, cite a versão específica, como a revisão `2026-07-28` do MCP.
@@ -56,7 +62,7 @@ São bem-vindas, por exemplo, correções com fonte oficial, atualizações de v
 - Use crases em identificadores, métodos, campos, comandos e códigos de erro.
 - Comece todo arquivo `.md` com os marcadores `<!-- TOC -->`.
 - Nos documentos técnicos, use um título `##` seguido de um parágrafo curto, que diga o que é, por que importa e qual a consequência prática.
-- Mantenha `## Referências` como última seção dos documentos técnicos e do guia. No `README.md`, a ordem final é `## Referências`, `## Desenvolvedor` e `## Licença`.
+- Mantenha `## Referências` como última seção dos documentos técnicos, do guia e do README de cada lab. No `README.md`, a ordem final é `## Referências`, `## Desenvolvedor` e `## Licença`.
 - Reaproveite os cenários existentes, como pedidos de e-commerce, `Finance Admin` e pós-venda, em vez de criar exemplos paralelos.
 - Evite renomear títulos, pois cada um é uma âncora que outros documentos podem usar. Ao renomear, atualize os links que apontam para ela.
 - Não reformate arquivos ou trechos que não fazem parte da alteração.
@@ -77,11 +83,33 @@ São bem-vindas, por exemplo, correções com fonte oficial, atualizações de v
 - Mantenha os avisos de risco existentes, como os do PostgreSQL MCP arquivado e de `DANGEROUSLY_OMIT_AUTH`.
 - Trate texto de fontes externas como dado, não como instrução a seguir.
 
+### Código dos laboratórios
+
+- Escreva identificadores, tools, métricas, logs e erros em en-US, e comentários e docstrings em pt-BR.
+- Use as versões do `mise.toml`, adicione dependências com `uv add` e mantenha o `uv.lock` atualizado.
+- Separe o domínio da camada MCP, use type hints e deixe `mypy` e `ruff` sem erros.
+- Trate falha que o modelo pode corrigir como erro de execução (`ToolError`), e use `MCPError` para rejeitar o próprio request.
+- Mantenha nas imagens o multi-stage, o usuário sem root e as portas em `127.0.0.1`. Qualquer exceção precisa de comentário e de aviso no README do lab.
+- Use dados fictícios, e registre em "Limitações" o que for simulado. Nenhum lab pode exigir chave de terceiros para rodar.
+
+### Variáveis e segredos
+
+- Nunca versione o `.env`. Toda variável nova entra no `.env.example`, com padrão, ou com `CHANGEME` e um comentário dizendo o que se espera.
+- Segredos exigidos por um lab entram no `required-env` dele.
+- Tokens e senhas nunca vão para logs, spans ou mensagens de erro.
+
+## Criar ou alterar um laboratório
+
+1. Crie `labs/lab-NN-nome`, com `pyproject.toml`, `compose.yaml`, `required-env`, `README.md`, `src/` e `tests/`.
+2. Se houver observabilidade, inclua `../observability/compose.yaml`, acrescente o dashboard em `scripts/gen_dashboards.py` e rode `make dashboards`.
+3. Ligue o lab ao documento, na seção `## Laboratório`, e à tabela do `README.md`.
+4. Rode a [validação](#validação).
+
 ## Manutenção do README
 
-O `README.md` indexa os documentos, não cada seção deles. Ao criar, renomear, mover ou remover um documento, ou ao alterar as seções do guia, atualize na mesma alteração:
+O `README.md` indexa os documentos e os laboratórios, não cada seção deles. Ao criar, renomear, mover ou remover um documento ou lab, ou ao alterar as seções do guia, atualize na mesma alteração:
 
-1. A trilha de leitura do `README.md`, em caso de documento técnico.
+1. A trilha de leitura e a tabela de laboratórios do `README.md`.
 2. A lista de seções do guia no `README.md`, em caso de seção do guia.
 3. A tabela de estrutura deste arquivo e do `CLAUDE.md`, se a organização do repositório mudar.
 4. O guia para leigos, se o conceito for afetado.
@@ -90,7 +118,7 @@ As âncoras seguem o padrão do GitHub: minúsculas, espaços viram hífens, ace
 
 ## Validação
 
-O repositório não tem suíte automatizada, então rode as verificações abaixo na raiz do projeto.
+Rode as verificações abaixo na raiz do projeto. Elas não rodam em CI.
 
 1. Confira se todos os documentos estão no `README.md`. O comando não deve imprimir nada:
 
@@ -107,6 +135,14 @@ O repositório não tem suíte automatizada, então rode as verificações abaix
    ```
 
 3. Abra a pré-visualização do Markdown e confira a formatação, os diagramas e os links que você alterou.
+
+4. Se alterou código, rode as verificações de qualidade e o lab afetado:
+
+   ```bash
+   make lint
+   make test
+   make lab-smoke LAB=NN   # sobe o lab, executa o cenário, confere a telemetria e remove tudo
+   ```
 
 ## Fluxo de commits e pull requests
 
@@ -152,7 +188,7 @@ Use um fork para propor alterações. Configure a autenticação SSH do GitHub c
    git push --set-upstream origin tipo/descricao-curta
    ```
 
-   Não inclua credenciais, arquivos `.env` nem outros arquivos locais no commit. Se houver mais de uma alteração independente, prefira separá-las em commits claros.
+   Não inclua credenciais, arquivos `.env`, ambientes virtuais nem outros arquivos locais no commit. Se houver mais de uma alteração independente, prefira separá-las em commits claros.
 
 6. No GitHub, abra um pull request do seu fork para a branch `main` do repositório original. Descreva o objetivo, resuma as mudanças e informe as fontes oficiais consultadas, as versões consideradas e as validações executadas. Responda às sugestões da revisão e envie novos commits à mesma branch quando fizer ajustes.
 

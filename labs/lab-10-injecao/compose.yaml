@@ -1,0 +1,51 @@
+# Lab 10: Injeção indireta e dados adulterados, com e sem defesas.
+include:
+  - ../observability/compose.yaml
+
+services:
+  server:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-10-injecao:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-10-injecao
+    command: ["python", "-m", "lab_10_injection.server"]
+    ports:
+      # Publicado em 127.0.0.1 para uso com o MCP Inspector no host.
+      - "127.0.0.1:${LAB_SERVICE_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      otel-collector:
+        condition: service_started
+
+  scenario:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    profiles: [scenario]
+    image: lab-10-injecao:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-10-injecao
+    command: ["python", "-m", "lab_10_injection.scenario"]
+    environment:
+      LLM_PROVIDER: ${LLM_PROVIDER:-fake}
+      LLM_MODEL: ${LLM_MODEL:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    depends_on:
+      server:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started

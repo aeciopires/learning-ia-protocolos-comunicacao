@@ -76,6 +76,8 @@ Esse emaranhado também gera **lock-in**, a dependência de um fornecedor: mudar
 
 **Para aprofundar:** [O caos das integrações](o-caos-das-integracoes.md)
 
+**Experimente:** o [Lab 01: o problema N×M](../labs/lab-01-nxm/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
+
 ## 2. Três formas de dar capacidades à IA
 
 Imagine que você precisa consertar algo em casa. Há três situações:
@@ -100,6 +102,8 @@ flowchart TD
 ```
 
 **Para aprofundar:** [Tool calling vs. MCP vs. A2A](tool-calling-vs-mcp-a2a.md)
+
+**Experimente:** o [Lab 03: tool calling, MCP e A2A](../labs/lab-03-camadas/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
 
 ## 3. O restaurante: host, client e server
 
@@ -132,6 +136,8 @@ Por que separar? Porque a cozinha pode trocar de fogão sem que o freguês perce
 
 **Para aprofundar:** [Host, client e server](host-client-server.md)
 
+**Experimente:** o [Lab 04: host, client e server](../labs/lab-04-host-client-server/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
+
 ## 4. Olhos, mãos e roteiro: resources, tools e prompts
 
 Um server oferece três tipos de capacidade, chamados **primitivos**:
@@ -160,6 +166,8 @@ Toda tool tem um **schema**, que funciona como um formulário com campos obrigat
 
 **Para aprofundar:** [Primitivos do MCP](primitivos-mcp.md)
 
+**Experimente:** o [Lab 05: resources, tools e prompts](../labs/lab-05-primitivos/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
+
 ## 5. Sampling: a cozinha pede uma segunda opinião
 
 > **Recurso em aposentadoria:** a [revisão 2026-07-28 do MCP](https://modelcontextprotocol.io/specification/2026-07-28/changelog) marcou o sampling como *Deprecated*. Ele ainda funciona, mas novos projetos não devem adotá-lo. A recomendação é o server chamar diretamente a IA do provedor.
@@ -187,6 +195,8 @@ sequenceDiagram
 - **O risco:** a IA aciona uma tool, que consulta a IA, que aciona outra tool... É como uma ligação transferida sem parar, com a conta subindo. Por isso são necessários limites de repetição e de custo.
 
 **Para aprofundar:** [Prompts e sampling](prompt-sampling.md)
+
+**Experimente:** o [Lab 06: prompts e inferência](../labs/lab-06-prompts-inferencia/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
 
 ## 6. JSON-RPC: a comanda padronizada
 
@@ -248,6 +258,8 @@ Nem todo problema vira um desses códigos. Quando a comanda está certa, mas a c
 
 **Para aprofundar:** [Wire format e JSON-RPC](wire-format-json-rpc.md)
 
+**Experimente:** o [Lab 02: JSON-RPC bruto](../labs/lab-02-json-rpc/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
+
 ## 7. Cada pedido é uma carta completa
 
 Até a revisão 2025-11-25, o MCP funcionava como um telefonema: primeiro os dois lados se apresentavam (`initialize`), depois conversavam e, por fim, desligavam.
@@ -277,6 +289,8 @@ sequenceDiagram
 Muitos servers e aplicativos ainda usam a forma antiga, e os SDKs atuais conseguem atender às duas.
 
 **Para aprofundar:** [Operação do ecossistema MCP](operacao-ecossistema-mcp.md)
+
+**Experimente:** o [Lab 07: ecossistema MCP](../labs/lab-07-ecossistema/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
 
 ## 8. Construindo um server: a loja com regras claras
 
@@ -316,6 +330,8 @@ Um protótipo pode funcionar em silêncio, mas um serviço de verdade precisa co
 Um detalhe traiçoeiro: no STDIO, usar `print` para anotar algo é como rabiscar na comanda oficial, porque mistura anotações com o protocolo e pode corromper a comunicação.
 
 **Para aprofundar:** [`McpServer` em TypeScript](mcpserver.md) e [`MCPServer` em Python](fastmcp.md)
+
+**Experimente:** o [Lab 09: Finance Admin](../labs/lab-09-finance-admin/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
 
 ## 9. Segurança: o prédio com várias portarias
 
@@ -399,6 +415,8 @@ Quando algo falha, existem duas visões do mesmo problema, como em um hospital: 
 > **Produção é evidência, não intenção:** não basta dizer que é seguro; é preciso provar com testes, como verificar que o processo não roda como administrador.
 
 **Para aprofundar:** [Segurança em camadas](seguranca-camada.md)
+
+**Experimente:** o [Lab 10: injeção e dados adulterados](../labs/lab-10-injecao/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
 
 ## 10. A2A: a equipe de especialistas
 
@@ -509,6 +527,8 @@ flowchart LR
 
 **Para aprofundar:** [Agent-to-Agent](agent-to-agent.md)
 
+**Experimente:** o [Lab 13: Tasks do A2A](../labs/lab-13-a2a-tasks/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
+
 ## 11. Tudo junto: um assistente de pós-venda
 
 Veja como as camadas se combinam no cenário de pós-venda usado nos [documentos técnicos](tool-calling-vs-mcp-a2a.md#coexistência-em-uma-mesma-arquitetura):
@@ -531,6 +551,8 @@ flowchart TD
 Cada interação usa a camada adequada. Não existe uma sigla vencedora.
 
 **Para aprofundar:** [Fundamentos](fundamentos.md) reúne o panorama completo.
+
+**Experimente:** o [Lab 15: assistente de pós-venda](../labs/lab-15-integrador/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
 
 ## O que os protocolos não resolvem
 

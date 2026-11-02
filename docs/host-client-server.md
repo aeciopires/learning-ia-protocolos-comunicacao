@@ -32,13 +32,17 @@ A analogia do restaurante ajuda a separar responsabilidades sem confundir os pap
 Server é o componente que concentra a complexidade real do negócio. Ele encapsula acesso a APIs, bancos de dados, sistemas legados e outras integrações, expondo isso de forma organizada para a arquitetura MCP. Isso não significa mover todo o legado para dentro dele, mas criar uma camada que consulta, compõe e entrega capacidades úteis. O ganho está em esconder detalhes internos atrás de uma interface estável.
 
 ## Resources e tools
-Resources são exposições de dados que o server fornece ao ecossistema, como documentos, logs, tabelas e contexto estruturado para leitura. Tools são capacidades executáveis, como enviar e-mail, calcular valores, registrar dados ou efetivar uma ação em outro sistema. A distinção importa porque ler contexto e executar efeitos colaterais são operações diferentes e exigem governança diferente. Esses primitivos serão reutilizados nas próximas partes do capítulo.
+Resources são exposições de dados que o server fornece ao ecossistema, como documentos, logs, tabelas e contexto estruturado para leitura. Tools são capacidades executáveis, como enviar e-mail, calcular valores, registrar dados ou efetivar uma ação em outro sistema. A distinção importa porque ler contexto e executar efeitos colaterais são operações diferentes e exigem governança diferente.
 
 ## Agnosticismo do server em relação ao modelo
 O server não deve depender do provider nem do modelo que originou a chamada. Ele precisa apenas expor uma interface padronizada, sem saber se a solicitação veio de GPT, Claude ou outro modelo. Essa neutralidade protege a lógica de domínio contra trocas de LLM e contra mudanças internas de infraestrutura, como migrar de SQL para NoSQL. Desde que o contrato MCP permaneça estável, a IA continua operando sem reescrita da integração de domínio.
 
 ## Arquitetura de contratos e separação de responsabilidades
 A arquitetura de contratos define onde começa e onde termina a responsabilidade de cada parte. O host governa contexto, experiência e permissão; o client garante protocolo, transporte e contenção de falhas; o server executa domínio e expõe capacidades. Essa divisão permite que times diferentes evoluam partes distintas do sistema sem interferir diretamente uns nos outros. O efeito arquitetural é governança mais clara, menor acoplamento e evolução mais segura em produção.
+
+## Laboratório
+
+O [Lab 04: host, client e server](../labs/lab-04-host-client-server/README.md) demonstra este conteúdo: ver a separação de papéis: um client por server, filtro de contexto por assunto, timeout e circuit breaker quando um server trava. Execute com `make lab-start LAB=04` e `make lab-run LAB=04`.
 
 ## Referências
 

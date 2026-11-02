@@ -40,6 +40,10 @@ Ao permitir que o server peça inferência e que o modelo, em resposta, acione t
 ## Inteligência distribuída como princípio arquitetural
 A combinação de prompts estruturados com inferência dentro do server desloca a arquitetura de um modelo centralizado no host para uma inteligência distribuída entre componentes. O host continua soberano na governança do que chega ao usuário, mas o server passa a carregar parte da semântica operacional. Há uma troca a ponderar: sampling deixava modelo e credenciais com o host, enquanto a chamada direta ao provedor transfere chave, custo e política de uso para o server. O ganho é a capacidade de evoluir e escalar sem reconstruir toda a integração, desde que essa responsabilidade tenha dono claro.
 
+## Laboratório
+
+O [Lab 06: prompts e inferência](../labs/lab-06-prompts-inferencia/README.md) demonstra este conteúdo: usar um prompt parametrizado, comparar a chamada direta ao provedor com o sampling legado e ver o limite de recursão. Execute com `make lab-start LAB=06` e `make lab-run LAB=06`.
+
 ## Referências
 
 Fontes oficiais sobre os temas deste documento.

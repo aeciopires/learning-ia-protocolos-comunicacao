@@ -1,0 +1,64 @@
+# Lab 04: Papéis de host, client e server, com circuit breaker.
+include:
+  - ../observability/compose.yaml
+
+services:
+  billing:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-04-host-client-server:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-04-host-client-server
+    command: ["python", "-m", "lab_04_hcs.billing_server"]
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      otel-collector:
+        condition: service_started
+
+  inventory:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    image: lab-04-host-client-server:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-04-host-client-server
+    command: ["python", "-m", "lab_04_hcs.inventory_server"]
+    healthcheck:
+      test: ["CMD", "python", "-m", "labs_common.healthcheck"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    depends_on:
+      otel-collector:
+        condition: service_started
+
+  scenario:
+    extends:
+      file: ../service-base.yaml
+      service: python-service
+    profiles: [scenario]
+    image: lab-04-host-client-server:local
+    build:
+      context: ../..
+      dockerfile: labs/python.Dockerfile
+      args:
+        LAB_PACKAGE: lab-04-host-client-server
+    command: ["python", "-m", "lab_04_hcs.scenario"]
+    depends_on:
+      billing:
+        condition: service_healthy
+      inventory:
+        condition: service_healthy
+      otel-collector:
+        condition: service_started

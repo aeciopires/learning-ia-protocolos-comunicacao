@@ -37,6 +37,10 @@ As três abordagens podem coexistir sem conflito porque operam em camadas difere
 ## Heurística de decisão
 A decisão pode começar por três perguntas sequenciais. Se o outro lado tem LLM próprio e autonomia, o problema é de agente para agente e A2A tende a ser o encaixe natural. Se não há agente do outro lado, mas a mesma capacidade precisa ser compartilhada entre múltiplos hosts ou modelos, MCP tende a ser a melhor camada. Se nada disso existe e o cenário é um protótipo simples, com um vendor e um processo, tool calling costuma ser suficiente.
 
+## Laboratório
+
+O [Lab 03: tool calling, MCP e A2A](../labs/lab-03-camadas/README.md) demonstra este conteúdo: executar a mesma capacidade nas três camadas e comparar o que cada uma acrescenta. Execute com `make lab-start LAB=03` e `make lab-run LAB=03`.
+
 ## Referências
 
 Fontes oficiais sobre os temas deste documento.

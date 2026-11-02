@@ -1,0 +1,16 @@
+[project]
+name = "lab-01-nxm"
+version = "0.1.0"
+description = "Uma tool nos formatos de três provedores e a conta NxM contra N+M"
+requires-python = ">=3.14"
+dependencies = ["labs-common"]
+
+[tool.uv.sources]
+labs-common = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.13,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "lab_01_nxm"

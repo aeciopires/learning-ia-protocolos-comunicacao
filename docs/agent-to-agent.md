@@ -202,6 +202,13 @@ A diferença central é geométrica e semântica ao mesmo tempo. O hierárquico 
 ## Quadro de decisão entre delegado, hierárquico e pipeline
 Use delegado quando a principal dificuldade for decidir qual especialista deve assumir a solicitação. Use hierárquico quando vários especialistas precisam trabalhar sobre o mesmo caso e alguém deve consolidar conflitos e produzir síntese. Use pipeline quando o trabalho é uma sequência de transformações em que a ordem é fixa e cada etapa prepara a próxima. A escolha correta não depende de qual pattern é “melhor”, mas de qual forma de coordenação reduz entropia, preserva contratos e entrega valor com menor complexidade operacional.
 
+## Laboratório
+
+Estes laboratórios demonstram o conteúdo:
+
+- [Lab 13: Tasks do A2A](../labs/lab-13-a2a-tasks/README.md): `make lab-start LAB=13` e `make lab-run LAB=13`.
+- [Lab 14: padrões multiagente](../labs/lab-14-a2a-padroes/README.md): `make lab-start LAB=14` e `make lab-run LAB=14`.
+
 ## Referências
 
 Fontes oficiais sobre os temas deste documento.

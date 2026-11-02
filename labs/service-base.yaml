@@ -1,0 +1,17 @@
+# Base dos serviços Python dos labs, usada com `extends`.
+# Aplica privilégio mínimo por padrão; um lab só relaxa o que precisar, com comentário.
+services:
+  python-service:
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 256m
+    environment:
+      LAB_ID: ${LAB_ID:-lab}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-http://otel-collector:4318}
+      OTEL_SDK_DISABLED: ${OTEL_SDK_DISABLED:-false}

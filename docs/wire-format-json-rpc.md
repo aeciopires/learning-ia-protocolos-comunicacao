@@ -32,7 +32,11 @@ Os códigos `-32700`, `-32600`, `-32601`, `-32602` e `-32603` classificam falhas
 REST encaixa melhor quando a integração é orientada a recursos e operações de CRUD; quando a conversa exige progresso, notificações e múltiplas pendências, ele tende a precisar de convenções adicionais. gRPC oferece performance, streaming e contratos fortes, mas cobra isso com mais peso operacional e menor legibilidade direta do payload. JSON-RPC ocupa o meio-termo adequado para o MCP: conversa estruturada, interoperabilidade, correlação explícita e baixo atrito para inspeção humana e consumo por sistemas com LLM.
 
 ## JSON-RPC como base do MCP
-JSON-RPC 2.0 funciona como o wire format do MCP porque fornece uma unidade mínima de comunicação simples, verificável e padronizada. É nesse nível que requests de tools, responses de execução, notifications de estado e erros passam a ser observáveis de forma uniforme. Entender essa camada é o pré-requisito para ler logs, interpretar o Inspector e depurar chamadas nas etapas práticas.
+JSON-RPC 2.0 funciona como o wire format do MCP porque fornece uma unidade mínima de comunicação simples, verificável e padronizada. É nesse nível que requests de tools, responses de execução, notifications de estado e erros passam a ser observáveis de forma uniforme. Entender essa camada é o pré-requisito para ler logs, interpretar o Inspector e depurar chamadas.
+
+## Laboratório
+
+O [Lab 02: JSON-RPC bruto](../labs/lab-02-json-rpc/README.md) demonstra este conteúdo: ler as mensagens reais, sem SDK: request, response, notification, respostas fora de ordem, códigos de erro, `_meta` e os cabeçalhos do Streamable HTTP. Execute com `make lab-start LAB=02` e `make lab-run LAB=02`.
 
 ## Referências
 

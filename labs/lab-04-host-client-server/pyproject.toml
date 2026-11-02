@@ -1,0 +1,16 @@
+[project]
+name = "lab-04-host-client-server"
+version = "0.1.0"
+description = "Papéis de host, client e server, com circuit breaker"
+requires-python = ">=3.14"
+dependencies = ["labs-common"]
+
+[tool.uv.sources]
+labs-common = { workspace = true }
+
+[build-system]
+requires = ["uv_build>=0.13,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "lab_04_hcs"
