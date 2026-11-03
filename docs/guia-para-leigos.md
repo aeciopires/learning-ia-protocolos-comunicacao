@@ -329,7 +329,7 @@ Um protótipo pode funcionar em silêncio, mas um serviço de verdade precisa co
 
 Um detalhe traiçoeiro: no STDIO, usar `print` para anotar algo é como rabiscar na comanda oficial, porque mistura anotações com o protocolo e pode corromper a comunicação.
 
-**Para aprofundar:** [`McpServer` em TypeScript](mcpserver.md) e [`MCPServer` em Python](fastmcp.md)
+**Para aprofundar:** [`McpServer` em TypeScript](mcpserver.md), [`MCPServer` em Python](fastmcp.md) e [Stack de observabilidade dos laboratórios](../labs/observability/README.md), que mostra por onde passam os logs, os traces e as métricas
 
 **Experimente:** o [Lab 09: Finance Admin](../labs/lab-09-finance-admin/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
 
@@ -406,7 +406,7 @@ flowchart LR
     end
     G --> S
     S --> D
-    S -.-> O["Telemetria: OTel, Prometheus, Tempo e Grafana"]
+    S -.-> O["Telemetria: OTel, Prometheus, Jaeger e Grafana"]
     G -.-> O
 ```
 
@@ -414,7 +414,7 @@ Quando algo falha, existem duas visões do mesmo problema, como em um hospital: 
 
 > **Produção é evidência, não intenção:** não basta dizer que é seguro; é preciso provar com testes, como verificar que o processo não roda como administrador.
 
-**Para aprofundar:** [Segurança em camadas](seguranca-camada.md)
+**Para aprofundar:** [Segurança em camadas](seguranca-camada.md) e [Stack de observabilidade dos laboratórios](../labs/observability/README.md)
 
 **Experimente:** o [Lab 10: injeção e dados adulterados](../labs/lab-10-injecao/README.md) mostra isso funcionando. Um laboratório é um pequeno exemplo executável, e os comandos estão no README dele.
 
@@ -613,7 +613,7 @@ A tomada padrão garante que o aparelho encaixa, mas não garante que ele funcio
 | **Lock-in** | Dependência que torna caro trocar de fornecedor |
 | **MCP** (Model Context Protocol) | Protocolo que liga a IA a ferramentas e dados |
 | **OAuth 2.1** | Padrão para dar acesso limitado sem entregar a senha |
-| **Observabilidade** | Capacidade de entender o que um sistema fez, a partir do que ele registra |
+| **Observabilidade** | Capacidade de entender o que um sistema fez, a partir do que ele registra. Veja a [stack usada nos laboratórios](../labs/observability/README.md) |
 | **Protocolo** | Conjunto de regras combinadas para a comunicação entre sistemas |
 | **Rate limit** | Limite de pedidos permitidos em um período |
 | **Schema** | Descrição dos campos e formatos que um dado precisa ter |

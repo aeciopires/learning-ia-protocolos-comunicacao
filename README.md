@@ -112,7 +112,7 @@ make lab-smoke LAB=09                 # sobe, executa, confere a telemetria e re
 
 ### Observar métricas, traces e logs
 
-Os labs com stack incluem Prometheus, Grafana, Jaeger, Loki e OpenTelemetry Collector, em versões fixas.
+Os labs com stack incluem Prometheus, Grafana, Jaeger, Loki e OpenTelemetry Collector, em versões fixas. O [README da stack de observabilidade](labs/observability/README.md) explica, com diagramas e analogias, como funciona a coleta de métricas, traces e logs e como ler os dashboards.
 
 | Ferramenta | Endereço | Para quê |
 | --- | --- | --- |
