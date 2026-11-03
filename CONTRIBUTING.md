@@ -31,6 +31,7 @@ O repositório tem material técnico em Markdown e laboratórios executáveis em
 | `README.md` | Porta de entrada e índice dos documentos |
 | `CLAUDE.md` | Regras de manutenção |
 | `CONTRIBUTING.md` | Este guia de contribuição |
+| `CHANGELOG.md` | Histórico das versões, em Versionamento Semântico |
 | `LICENSE` | Licença GPLv3 |
 | `labs/lab-NN-*` | Laboratórios: código, Compose, testes e README |
 | `labs/common` | Código compartilhado pelos labs |

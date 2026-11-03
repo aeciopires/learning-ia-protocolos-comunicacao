@@ -14,6 +14,7 @@ Regras para manter este repositório: material técnico em Markdown e laboratór
 | `README.md` | Porta de entrada e índice dos documentos | Precisa listar todos os documentos de `docs/` e as seções do guia |
 | `CLAUDE.md` | Estas regras | Manter curto e atualizado |
 | `CONTRIBUTING.md` | Guia para quem propõe alterações | Manter coerente com estas regras |
+| `CHANGELOG.md` | Histórico das versões, em Versionamento Semântico | Registrar toda mudança relevante em `## Não publicado` |
 | `labs/lab-NN-*` | Um laboratório: código, Compose, testes e README | Precisa estar ligado a um documento técnico |
 | `labs/common` | Settings, telemetria, LLM e publicação HTTP compartilhados | Não colocar lógica de um lab só |
 | `labs/observability` | Stack, provisionamento e dashboards gerados | Versões fixas; dashboards vêm de `scripts/gen_dashboards.py` |

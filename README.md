@@ -176,7 +176,7 @@ Em relação às versões anteriores, as principais mudanças são:
 
 ## Manutenção
 
-Para propor uma alteração, siga o [guia de contribuição](CONTRIBUTING.md). As regras completas para editar o conteúdo, os diagramas e este README estão em [CLAUDE.md](CLAUDE.md).
+Para propor uma alteração, siga o [guia de contribuição](CONTRIBUTING.md). As regras completas para editar o conteúdo, os diagramas e este README estão em [CLAUDE.md](CLAUDE.md). As mudanças de cada versão estão em [CHANGELOG.md](CHANGELOG.md).
 
 ## Referências
 
