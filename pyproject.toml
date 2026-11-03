@@ -1,6 +1,6 @@
 # Raiz do workspace uv: um único uv.lock para todos os laboratórios.
 [project]
-name = "mba-protocolos-comunicacao"
+name = "learning-ia-protocolos-comunicacao"
 version = "0.1.0"
 description = "Laboratórios sobre protocolos de comunicação para sistemas de IA"
 requires-python = ">=3.14"

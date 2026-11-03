@@ -148,17 +148,17 @@ Rode as verificações abaixo na raiz do projeto. Elas não rodam em CI.
 
 Use um fork para propor alterações. Configure a autenticação SSH do GitHub conforme a [documentação oficial](https://docs.github.com/authentication/connecting-to-github-with-ssh) e siga estes passos:
 
-1. Crie um fork de `aeciopires/mba-protocolos-comunicacao` no GitHub e clone-o:
+1. Crie um fork de `aeciopires/learning-ia-protocolos-comunicacao` no GitHub e clone-o:
 
    ```bash
-   git clone git@github.com:SEU_USUARIO/mba-protocolos-comunicacao.git
-   cd mba-protocolos-comunicacao
+   git clone git@github.com:SEU_USUARIO/learning-ia-protocolos-comunicacao.git
+   cd learning-ia-protocolos-comunicacao
    ```
 
 2. Registre o repositório original como `upstream` e confira os remotos:
 
    ```bash
-   git remote add upstream git@github.com:aeciopires/mba-protocolos-comunicacao.git
+   git remote add upstream git@github.com:aeciopires/learning-ia-protocolos-comunicacao.git
    git remote -v
    ```
 

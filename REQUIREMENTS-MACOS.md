@@ -84,7 +84,7 @@ Fonte: [mise - Getting started](https://mise.jdx.dev/getting-started.html) (alte
 ```bash
 curl https://mise.run | sh
 echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc && source ~/.zshrc
-cd mba-protocolos-comunicacao
+cd learning-ia-protocolos-comunicacao
 mise trust && mise install
 mise exec -- uv sync --locked --all-packages
 make secret                                                  # cria o .env e gera os segredos locais
